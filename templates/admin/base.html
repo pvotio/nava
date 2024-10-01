@@ -1,0 +1,49 @@
+{% extends "admin/base.html" %}
+
+{% block dark-mode-vars %}{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<!-- Load Lato font from Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #bbbbbb;
+  --secondary: #162D4F;
+  --link-fg: #162D4F;
+  --header-link-color: #FFFFFF;
+  --selected-row: #c4dce8;
+  --accent: #FFFFFF;
+  --header-color: #FFFFFF;
+  --breadcrumbs-fg: #162D4F;
+  --breadcrumbs-bg: #FFFFFF;
+  --breadcrumbs-link-fg: #656565;
+}
+
+/* Apply the Lato font to the entire admin interface */
+body, .addlink, .changelink, .inlinechangelink {
+  font-family: 'Lato', sans-serif;
+}
+
+.addlink {
+  filter: grayscale(1);
+}
+
+.changelink, .inlinechangelink {
+  filter: grayscale(1);
+}
+
+#header {
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 0px;
+  padding-right: 10px;
+  background: var(--header-bg);
+  color: var(--header-color);
+  overflow: hidden;
+}
+
+</style>
+{% endblock %}

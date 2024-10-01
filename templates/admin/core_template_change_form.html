@@ -1,0 +1,9 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls %}
+
+{% block object-tools-items %}
+{% url opts|admin_urlname:'permissions' original.pk|admin_urlquote as history_url %}
+{{ block.super }}
+<li><a href="{% add_preserved_filters history_url %}">{% trans "Object permissions" %}</a></li>
+<li><a href="{% url 'admin:generate_report' original.pk %}">{% trans "Generate" %}</a></li>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nava - Report Generation</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #FFFFFF;
+        }
+        .message {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: rgb(92, 92, 92);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="message">The report is being generated.</div>
+
+    <script>
+        let hashId = "{{ hash_id }}";
+        let intervalId;
+        const messageDiv = document.querySelector('.message');
+
+        function checkReportStatus() {
+            fetch(`/api/reports/result/${hashId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "G") {
+                        clearInterval(intervalId);
+                        messageDiv.innerHTML = 'The report has been generated! If not redirected, ' + 
+                                                `<a href="${data.download_link}" target="_blank">click here</a> to download.`;
+                        window.location.href = data.download_link;
+                    } else if (data.error) {
+                        clearInterval(intervalId);
+                        messageDiv.textContent = "Error: " + data.error;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error checking report status:", error);
+                });
+        }
+
+        intervalId = setInterval(checkReportStatus, 1000);
+    </script>
+
+</body>
+
+</html>
