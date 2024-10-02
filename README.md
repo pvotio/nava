@@ -17,7 +17,7 @@ Nava is a Django-based web application designed for efficient and dynamic report
 ## Installation & Setup
 ### Clone the Repository
    ```bash
-   git clone git@github.com:alimghmi/reporting-django.git
+   git clone git@github.com:arqs-io/nava.git
    cd reporting-django
    ```
 ### Environment Setup
