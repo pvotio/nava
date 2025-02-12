@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
 from pathlib import Path
+
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,14 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", default="TE74JSJKSLS0978298FJKASDJK@1889*&JKSBDKJ"
-)
+SECRET_KEY = config("SECRET_KEY", default="TE74JSJKSLS0978298FJKASDJK@1889*&JKSBDKJ")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", default=0))
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", default="*").split(" ")
 
 
 # Application definition
@@ -100,20 +99,23 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+SQL_AD_LOGIN = config("SQL_AD_LOGIN", default=False, cast=bool)
+
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "ENGINE": "db_backends.azure_postgres",
+        "NAME": config("SQL_DATABASE"),
+        "USER": config("SQL_USER"),
+        "PASSWORD": config("SQL_PASSWORD"), 
+        "HOST": config("SQL_HOST"),
+        "PORT": config("SQL_PORT", default="5432"),
     }
 }
 
-GENERATOR_HOST = os.environ.get("GENERATOR_HOST", "generator:3000")
+GENERATOR_HOST = config("GENERATOR_HOST", default="generator:3000")
 
-REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
+REDIS_HOST = config("REDIS_HOST", default="redis")
 
 CACHES = {
     "default": {
@@ -178,13 +180,16 @@ MEDIA_ROOT = BASE_DIR / 'files'
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/1'
 CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:6379/2'
 
-CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", default="").split(" ")
+CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="").split(" ")
 
-RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY")
-RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY")
+RECAPTCHA_PUBLIC_KEY = config("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = config("RECAPTCHA_PRIVATE_KEY")
 
 SIMPLE_HISTORY_REVERT_DISABLED = True
 SIMPLE_HISTORY_ENFORCE_HISTORY_MODEL_PERMISSIONS = True
 
-REQUEST_MAX_RETRIES = int(os.environ.get("REQUEST_MAX_RETRIES", default=3))
-REQUEST_BACKOFF_FACTOR = float(os.environ.get("REQUEST_BACKOFF_FACTOR", default=0.2))
+REQUEST_MAX_RETRIES = config("REQUEST_MAX_RETRIES", default=3, cast=int)
+REQUEST_BACKOFF_FACTOR = config("REQUEST_BACKOFF_FACTOR", default=0.2, cast=float)
+
+SESSION_COOKIE_AGE = 45 * 60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
