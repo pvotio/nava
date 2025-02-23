@@ -1,0 +1,54 @@
+# Azure DevOps Pipeline for Nava PDF Report Generation App
+
+trigger:
+  - main  # Trigger pipeline on pushes to main branch
+
+resources:
+  - repo: self
+
+variables:
+  dockerRegistryServiceConnection: 'pa-azure-container-registry'
+  djangoImageRepository: 'nava-django'
+  puppeteerImageRepository: 'nava-puppeteer'
+  djangoDockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  puppeteerDockerfilePath: '$(Build.SourcesDirectory)/puppeteer/Dockerfile'
+  tag: $[format('{0:yyyy}.{0:MM}{0:dd}', pipeline.startTime)]
+  buildId: $(Build.BuildId)
+
+stages:
+  - stage: BuildAndPush
+    displayName: Build and Push Docker Images
+    jobs:
+      - job: BuildDjango
+        displayName: Build & Push Django App Image
+        pool:
+          name: devops-agent-pool
+        steps:
+          - task: Docker@2
+            displayName: Build and Push Django App Image
+            inputs:
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(djangoImageRepository)
+              command: buildAndPush
+              dockerfile: $(djangoDockerfilePath)
+              buildContext: '$(System.DefaultWorkingDirectory)/'
+              tags: |
+                latest
+                $(tag).$(buildId)
+
+      - job: BuildPuppeteer
+        displayName: Build & Push Puppeteer Image
+        pool:
+          name: devops-agent-pool
+        steps:
+          - task: Docker@2
+            displayName: Build and Push Puppeteer Image
+            inputs:
+              containerRegistry: $(dockerRegistryServiceConnection)
+              repository: $(puppeteerImageRepository)
+              command: buildAndPush
+              dockerfile: $(puppeteerDockerfilePath)
+              buildContext: '$(System.DefaultWorkingDirectory)/puppeteer'
+              tags: |
+                latest
+                $(tag).$(buildId)
