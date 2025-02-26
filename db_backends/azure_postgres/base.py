@@ -25,6 +25,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             conn_params["user"] = settings.DATABASES["default"]["USER"]
             conn_params["sslmode"] = "require"
         else:
+            logger.info("POSTGRES BASIC AUTH")
             conn_params["user"] = settings.DATABASES["default"]["USER"]
             conn_params["password"] = settings.DATABASES["default"]["PASSWORD"]
 
