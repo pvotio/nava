@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from simple_history.models import HistoricalRecords
 
+from core.fields import AzureSafeJSONField
 from core.utils import decrypt_connection_string, encrypt_connection_string
 from core.validators import validate_python
 
@@ -98,7 +99,7 @@ class Report(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     hash_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     template = models.ForeignKey(Template, on_delete=models.DO_NOTHING)
-    input_args = models.JSONField(default=dict)
+    input_args = AzureSafeJSONField(default=dict)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default="P")
     output_content = models.TextField(blank=True)
     output_file = models.CharField(max_length=200, blank=True)
