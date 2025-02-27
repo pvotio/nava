@@ -14,17 +14,17 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         """Override connection method to support both authentication types."""
 
         if settings.SQL_AD_LOGIN:
-            logger.info("Postgres AD Login")
+            logger.debug("Postgres AD Login")
             credential = DefaultAzureCredential()
             token = credential.get_token(
                 "https://ossrdbms-aad.database.windows.net/.default"
             ).token
-            logger.info(f"Fetched token from Azure: {token[:20]}[DEDUCTED]")
+            logger.debug(f"Fetched token from Azure: {token[:20]}[DEDUCTED]")
             conn_params["password"] = token
             conn_params["user"] = settings.DATABASES["default"]["USER"]
             conn_params["sslmode"] = "require"
         else:
-            logger.info("Postgres Basic Login")
+            logger.debug("Postgres Basic Login")
             conn_params["user"] = settings.DATABASES["default"]["USER"]
             conn_params["password"] = settings.DATABASES["default"]["PASSWORD"]
 
