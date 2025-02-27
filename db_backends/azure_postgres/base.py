@@ -6,7 +6,6 @@ from django.conf import settings
 from django.db.backends.postgresql.base import \
     DatabaseWrapper as BaseDatabaseWrapper
 
-
 logger = logging.getLogger(__name__)
 
 
