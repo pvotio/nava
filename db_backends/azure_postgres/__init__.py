@@ -1,1 +1,1 @@
-from .base import DatabaseWrapper
+from .base import DatabaseWrapper  # noqa: F401
