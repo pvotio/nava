@@ -7,6 +7,15 @@ from django.db.backends.postgresql.base import \
     DatabaseWrapper as BaseDatabaseWrapper
 
 logger = logging.getLogger(__name__)
+_azure_credential = None
+
+
+def get_azure_credential():
+    global _azure_credential
+    if _azure_credential is None:
+        _azure_credential = DefaultAzureCredential()
+
+    return _azure_credential
 
 
 class DatabaseWrapper(BaseDatabaseWrapper):
@@ -15,7 +24,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
         if settings.SQL_AD_LOGIN:
             logger.debug("Postgres AD Login")
-            credential = DefaultAzureCredential()
+            credential = get_azure_credential()
             token = credential.get_token(
                 "https://ossrdbms-aad.database.windows.net/.default"
             ).token

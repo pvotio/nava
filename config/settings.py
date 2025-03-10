@@ -110,6 +110,7 @@ DATABASES = {
         "PASSWORD": config("SQL_PASSWORD"), 
         "HOST": config("SQL_HOST"),
         "PORT": config("SQL_PORT", default="5432"),
+        "CONN_MAX_AGE": 60,
     }
 }
 
