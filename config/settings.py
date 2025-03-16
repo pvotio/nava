@@ -104,7 +104,7 @@ SQL_AD_LOGIN = config("SQL_AD_LOGIN", default=False, cast=bool)
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "db_backends.azure_postgres",
         "NAME": config("SQL_DATABASE"),
         "USER": config("SQL_USER"),
         "PASSWORD": config("SQL_PASSWORD"), 
