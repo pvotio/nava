@@ -16,7 +16,9 @@ def validate_report(template_id, args, report_id):
         f"Starting validation for report {report_id} with template {template_id}"
     )
     validator_instance = validate.Validator(
-        template_id, args, [str(report.title).lower() for report in helper.get_all_templates(True)]
+        template_id,
+        args,
+        [str(report.title).lower() for report in helper.get_all_templates(True)],
     )
     module_name, process_args = validator_instance.validate()
     return {
