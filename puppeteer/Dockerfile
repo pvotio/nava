@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:23.11.0-bookworm-slim
 
 WORKDIR /app
 
@@ -23,13 +23,16 @@ RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     fonts-liberation \
     libappindicator1 \
+    wget \
+    gpg \
     xdg-utils \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-linux-keyring.gpg \
     && sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list' \
     && apt-get update \
-    && apt-get install -y google-chrome-stable
+    && apt-get install -y google-chrome-stable \
+    && apt-get update -y && apt-get upgrade -y 
 
 COPY package*.json ./
 
