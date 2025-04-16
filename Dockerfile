@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM python:3.12
 
 WORKDIR /app
 
@@ -22,7 +22,8 @@ RUN apt-get install -y curl \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y msodbcsql17 msodbcsql18 mssql-tools unixodbc-dev \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
-    && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+    && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
+    && apt-get update -y && apt-get upgrade -y
 
 RUN pip install --upgrade pip
 COPY requirements.txt .
